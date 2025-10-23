@@ -14,7 +14,7 @@ A modern, responsive frontend for a personal portfolio. Built to showcase projec
 - Framework: React 
 - Bundler: Vite 
 - Styling: Tailwind CSS / CSS Modules / Styled Components
-- Optional: TypeScript
+- Optional: TypeScript, react-hook-form, tanstack/react-query, Zod
 
 ## Getting started
 
