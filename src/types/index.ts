@@ -55,6 +55,8 @@ export interface Project {
   demo_url: string;
   github_repos: { name: string; url: string }[];
   status: ProjectStatus;
+  downloads: number;
+  rating: number;
   category: string;
   order: number;
   created_at: string;
@@ -63,7 +65,10 @@ export interface Project {
 
 export interface Skill {
   _id: string;
-  skills: { category: string; name: string; level?: number; years?: number }[];
+  category: string;
+  name: string;
+  level?: number;
+  years?: number;
   created_at: string;
   updated_at: string;
 }

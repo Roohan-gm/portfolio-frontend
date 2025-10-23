@@ -2,13 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
 import {
-  Smartphone,
   Database,
-  Settings,
   Zap,
   GitBranch,
   Palette,
   Cloud,
+  Languages,
+  Library,
+  Workflow,
+  Hammer,
 } from "lucide-react";
 import { useSkills } from "../hooks/useSkills";
 import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
@@ -17,9 +19,10 @@ import { formatMetric } from "@/utils/formatMetric";
 
 const Skills = () => {
   const { data: skills, loading: skillsLoading, error } = useSkills();
+  console.log("skills data:", skills);
   const { data: developer, loading: devLoading } = useDeveloperInfo();
 
-  // ✅ Check both loading states
+  // Check both loading states
   if (skillsLoading || devLoading) {
     return (
       <section id="skills" className="py-20 bg-white">
@@ -54,7 +57,7 @@ const Skills = () => {
 
   // Group skills by category dynamically
   const groupedSkills =
-    skills?.skills.reduce((acc, skill) => {
+    skills?.reduce((acc, skill) => {
       if (!acc[skill.category]) {
         acc[skill.category] = [];
       }
@@ -65,27 +68,33 @@ const Skills = () => {
   // Map categories to UI config
   const categoryConfig = [
     {
-      key: "mobile",
-      title: "Mobile Development",
-      icon: <Smartphone className="w-6 h-6 text-blue-600" />,
+      key: "Frameworks/Libraries",
+      title: "Frameworks/Libraries",
+      icon: <Library className="w-6 h-6 text-blue-600" />,
       color: "bg-blue-50 border-blue-200",
     },
     {
-      key: "backend",
-      title: "Backend & Database",
+      key: "Database",
+      title: "Database",
       icon: <Database className="w-6 h-6 text-green-600" />,
       color: "bg-green-50 border-green-200",
     },
     {
-      key: "tools",
-      title: "Tools & Workflow",
-      icon: <Settings className="w-6 h-6 text-purple-600" />,
+      key: "Developer Tools",
+      title: "Developer Tools",
+      icon: <Hammer className="w-6 h-6 text-purple-600" />,
       color: "bg-purple-50 border-purple-200",
     },
     {
-      key: "frontend",
-      title: "Frontend Development",
-      icon: <Palette className="w-6 h-6 text-red-600" />,
+      key: "Languages",
+      title: "Languages",
+      icon: <Languages className="w-6 h-6 text-red-600" />,
+      color: "bg-red-50 border-red-200",
+    },
+    {
+      key: "Devops",
+      title: "Devops",
+      icon: <Workflow className="w-6 h-6 text-red-600" />,
       color: "bg-red-50 border-red-200",
     },
   ];

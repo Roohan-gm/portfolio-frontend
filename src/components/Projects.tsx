@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -16,11 +16,22 @@ import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import type { Project } from "@/types";
 
+// Helper to format download count (e.g., 1500 → "1.5K", 2500000 → "2.5M")
+const formatDownloads = (num: number): string => {
+  if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return num.toString();
+};
+
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [filter, setFilter] = useState<string>("All");
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all projects (no filter param)
   const { data: allProjects, loading, error } = useProjects();
 
   const allCategories = useMemo(() => {
@@ -33,6 +44,13 @@ const Projects: React.FC = () => {
     allProjects?.filter((project) =>
       filter === "All" ? true : project.category === filter
     ) || [];
+
+  // Close modal when clicking outside
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setSelectedProject(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -100,6 +118,7 @@ const Projects: React.FC = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {projects.map((project) => (
             <Card
+              key={project._id}
               className="group hover:shadow-xl transition-all duration-300 border-gray-200 hover:border-blue-200 cursor-pointer"
               onClick={() => setSelectedProject(project)}
             >
@@ -121,7 +140,7 @@ const Projects: React.FC = () => {
                     {project.status}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
+                <CardTitle className="text-xl group-hover:text-blue-600 transition-colors line-clamp-1">
                   {project.title}
                 </CardTitle>
                 <CardDescription className="text-gray-600">
@@ -135,11 +154,7 @@ const Projects: React.FC = () => {
                     {project.tech_stack
                       .slice(0, 3)
                       .map((tech: string, index: number) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-xs"
-                        >
+                        <Badge key={index} variant="outline" className="text-xs">
                           {tech}
                         </Badge>
                       ))}
@@ -150,56 +165,73 @@ const Projects: React.FC = () => {
                     )}
                   </div>
 
+                  {/* Conditional Rating & Downloads */}
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-1">
-                        <Star
-                          size={14}
-                          fill="currentColor"
-                          className="text-yellow-500"
-                        />
-                        <span>4.{Math.floor(Math.random() * 5) + 3}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Download size={14} />
-                        <span>{Math.floor(Math.random() * 50) + 10}K</span>
-                      </div>
+                      {project.rating != null && project.rating > 0 && (
+                        <div className="flex items-center space-x-1">
+                          <Star size={14} fill="currentColor" className="text-yellow-500" />
+                          <span>{project.rating.toFixed(1)}</span>
+                        </div>
+                      )}
+                      {project.downloads != null && project.downloads > 0 && (
+                        <div className="flex items-center space-x-1">
+                          <Download size={14} />
+                          <span>{formatDownloads(project.downloads)}</span>
+                        </div>
+                      )}
+                      {/* Show placeholder if neither exists */}
+                      {(!project.rating || project.rating <= 0) &&
+                        (!project.downloads || project.downloads <= 0) && (
+                          <span></span>
+                        )}
                     </div>
                     <Badge variant="outline" className="text-xs">
                       {project.category}
                     </Badge>
                   </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(project.demo_url, "_blank");
-                      }}
-                    >
-                      <ExternalLink size={14} className="mr-2" />
-                      Demo
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(project.github_repos[0]?.url, "_blank");
-                      }}
-                    >
-                      <img
-                        src={SOCIAL_LOGOS.GitHub}
-                        alt="GitHub"
-                        className="w-6 h-6 mr-2"
-                      />
-                      Code
-                    </Button>
-                  </div>
+                  {/* Action Buttons */}
+                  {project.demo_url || project.github_repos.length > 0 ? (
+                    <div className="flex gap-2 pt-2">
+                      {project.demo_url && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(project.demo_url, "_blank");
+                          }}
+                        >
+                          <ExternalLink size={14} className="mr-2" />
+                          Demo
+                        </Button>
+                      )}
+                      {project.github_repos.length > 0 && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(project.github_repos[0].url, "_blank");
+                          }}
+                        >
+                          <img
+                            src={SOCIAL_LOGOS.GitHub}
+                            alt="GitHub"
+                            className="w-6 h-6 mr-2"
+                          />
+                          {project.github_repos.length === 1 ? "Code" : "Code+"}
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic pt-2">
+                      No demo or source available.
+                    </p>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -208,8 +240,15 @@ const Projects: React.FC = () => {
 
         {/* Project Modal/Detail View */}
         {selectedProject && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={handleBackdropClick}
+          >
+            <div
+              ref={modalRef}
+              className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col"
+            >
+              {/* Modal Header */}
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-bold">
@@ -225,7 +264,8 @@ const Projects: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-6 space-y-6">
+              {/* Scrollable Content */}
+              <div className="p-6 overflow-y-auto flex-1">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <img
@@ -244,10 +284,7 @@ const Projects: React.FC = () => {
                       <ul className="space-y-1 text-sm text-gray-600">
                         {selectedProject.features.map(
                           (feature: string, index: number) => (
-                            <li
-                              key={index}
-                              className="flex items-start space-x-2"
-                            >
+                            <li key={index} className="flex items-start space-x-2">
                               <span className="text-blue-600 mt-1">•</span>
                               <span>{feature}</span>
                             </li>
@@ -268,37 +305,89 @@ const Projects: React.FC = () => {
                         )}
                       </div>
                     </div>
+
+                    {/* Conditional Stats in Modal */}
+                    {(selectedProject.rating != null && selectedProject.rating > 0) ||
+                      (selectedProject.downloads != null && selectedProject.downloads > 0) ? (
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 pt-2">
+                          {selectedProject.rating != null && selectedProject.rating > 0 && (
+                            <div className="flex items-center space-x-1">
+                              <Star size={16} fill="currentColor" className="text-yellow-500" />
+                              <span className="font-medium">{selectedProject.rating.toFixed(1)} / 5</span>
+                            </div>
+                          )}
+                          {selectedProject.downloads != null && selectedProject.downloads > 0 && (
+                            <div className="flex items-center space-x-1">
+                              <Download size={16} />
+                              <span className="font-medium">
+                                {formatDownloads(selectedProject.downloads)} downloads
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : null}
+
+                    {/* Show all GitHub repos in modal */}
+                    {selectedProject.github_repos.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2">Source Code:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedProject.github_repos.map((repo, index) => (
+                            <Button
+                              key={index}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(repo.url, "_blank")}
+                            >
+                              <img
+                                src={SOCIAL_LOGOS.GitHub}
+                                alt="GitHub"
+                                className="w-4 h-4 mr-1"
+                              />
+                              {repo.name}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                <div className="flex gap-4 pt-4 border-t">
-                  <Button
-                    className="bg-blue-600 hover:bg-blue-700"
-                    onClick={() =>
-                      window.open(selectedProject.demo_url, "_blank")
-                    }
-                  >
-                    <ExternalLink size={16} className="mr-2" />
-                    View Demo
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      window.open(
-                        selectedProject.github_repos[0]?.url,
-                        "_blank"
-                      )
-                    }
-                  >
-                    <img
-                      src={SOCIAL_LOGOS.GitHub}
-                      alt="GitHub"
-                      className="w-6 h-6 mr-2"
-                    />
-                    Source Code
-                  </Button>
-                </div>
               </div>
+
+              {/* Fixed Action Buttons at Bottom */}
+              {(selectedProject.demo_url || selectedProject.github_repos.length > 0) && (
+                <div className="p-6 border-t flex gap-4">
+                  {selectedProject.demo_url && (
+                    <Button
+                      className="bg-blue-600 hover:bg-blue-700 flex-1"
+                      onClick={() =>
+                        window.open(selectedProject.demo_url, "_blank")
+                      }
+                    >
+                      <ExternalLink size={16} className="mr-2" />
+                      View Demo
+                    </Button>
+                  )}
+                  {selectedProject.github_repos.length > 0 && (
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() =>
+                        window.open(selectedProject.github_repos[0].url, "_blank")
+                      }
+                    >
+                      <img
+                        src={SOCIAL_LOGOS.GitHub}
+                        alt="GitHub"
+                        className="w-6 h-6 mr-2"
+                      />
+                      {selectedProject.github_repos.length === 1
+                        ? "Source Code"
+                        : "Primary Repo"}
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
