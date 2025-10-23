@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
 import { ErrorMessage } from "../components/ui/custom";
-import { useEffect } from "react";
 import { formatMetric } from "@/utils/formatMetric";
 
 const codeSnippet = `// React Native Performance Optimization
@@ -44,11 +43,12 @@ type HeroProps = {
 };
 
 const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
-  const { data: developerInfo, loading, error } = useDeveloperInfo(); // ✅ Hook called at top level
+  const {
+    data: developerInfo,
+    isLoading: loading,
+    isError: error,
+  } = useDeveloperInfo();
 
-  useEffect(() => {
-    console.log("Developer Info:", developerInfo);
-  }, [developerInfo]);
   const scrollToProjects = () => {
     const element = document.getElementById("projects");
     if (element) {

@@ -9,22 +9,22 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { Toaster } from "./components/ui/sonner";
 
-// const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-// const API = `${BACKEND_URL}/api`;
-
 const Portfolio = () => {
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'projects', 'skills', 'about', 'contact'];
+      const sections = ["hero", "projects", "skills", "about", "contact"];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
             setActiveSection(section);
             break;
           }
@@ -32,13 +32,16 @@ const Portfolio = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <div className="bg-slate-900">
-      <Header activeSection={activeSection} onSectionChange={setActiveSection} />
+      <Header
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+      />
       <main>
         <Hero onSectionChange={setActiveSection} />
         <Projects />
@@ -60,6 +63,7 @@ function App() {
           <Route path="/" element={<Portfolio />} />
         </Routes>
       </BrowserRouter>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

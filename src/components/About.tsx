@@ -18,28 +18,28 @@ import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
 import type { Testimonial } from "@/types";
 const About = () => {
   const {
-    data: developerInfo,
-    loading: devLoading,
-    error: devError,
+    data: developer,
+    isLoading,
+    isError
   } = useDeveloperInfo();
   const {
     data: experience,
-    loading: expLoading,
-    error: expError,
+    isLoading: expLoading,
+    isError: expError,
   } = useExperiences();
   const {
     data: testimonials,
-    loading: testLoading,
-    error: testError,
+    isLoading: testLoading,
+    isError: testError,
   } = useTestimonials();
 
   const getSocialUrl = (platform: string) => {
     return (
-      developerInfo?.social.find((link) => link.name === platform)?.url || ""
+      developer?.social.find((link) => link.name === platform)?.url || ""
     );
   };
 
-  if (devLoading || expLoading || testLoading) {
+  if (isLoading || expLoading || testLoading) {
     return (
       <section id="about" className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +56,7 @@ const About = () => {
     );
   }
 
-  if (devError || expError || testError) {
+  if (isError || expError || testError) {
     return (
       <section id="about" className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,28 +93,28 @@ const About = () => {
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="flex-shrink-0 ">
                   <img
-                    src={developerInfo?.avatar}
-                    alt={developerInfo?.name}
+                    src={developer?.avatar}
+                    alt={developer?.name}
                     className="w-32 h-32 rounded-2xl object-cover shadow-lg bg-blue-900/40"
                   />
                 </div>
                 <div className="flex-1 space-y-4">
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                      {developerInfo?.name}
+                      {developer?.name}
                     </h3>
                     <p className="text-blue-600 font-semibold mb-4">
-                      {developerInfo?.title}
+                      {developer?.title}
                     </p>
                     <p className="text-gray-700 leading-relaxed">
-                      {developerInfo?.bio}
+                      {developer?.bio}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                     <div className="flex items-center space-x-2">
                       <MapPin size={16} />
-                      <span>{developerInfo?.location}</span>
+                      <span>{developer?.location}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Calendar size={16} />
@@ -123,9 +123,9 @@ const About = () => {
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    {developerInfo?.resumeUrl && (
+                    {developer?.resumeUrl && (
                       <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                        <a href={developerInfo.resumeUrl} download>
+                        <a href={developer.resumeUrl} download>
                           <Download size={16} className="mr-2" />
                           Download Resume
                         </a>
@@ -290,15 +290,15 @@ const About = () => {
                 <div className="flex items-center space-x-3 text-gray-700">
                   <span className="font-medium">Email:</span>
                   <a
-                    href={`mailto:${developerInfo?.email}`}
+                    href={`mailto:${developer?.email}`}
                     className="text-blue-600 hover:underline"
                   >
-                    {developerInfo?.email}
+                    {developer?.email}
                   </a>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-700">
                   <span className="font-medium">Location:</span>
-                  <span>{developerInfo?.location}</span>
+                  <span>{developer?.location}</span>
                 </div>
                 <div className="text-gray-600 text-xs mt-3">
                   Available for freelance projects and full-time opportunities

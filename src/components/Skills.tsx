@@ -18,9 +18,12 @@ import { useDeveloperInfo } from "@/hooks/useDeveloperInfo";
 import { formatMetric } from "@/utils/formatMetric";
 
 const Skills = () => {
-  const { data: skills, loading: skillsLoading, error } = useSkills();
-  console.log("skills data:", skills);
-  const { data: developer, loading: devLoading } = useDeveloperInfo();
+  const {
+    data: skills,
+    isLoading: skillsLoading,
+    isError: error,
+  } = useSkills();
+  const { data: developer, isLoading: devLoading } = useDeveloperInfo();
 
   // Check both loading states
   if (skillsLoading || devLoading) {

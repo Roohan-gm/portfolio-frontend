@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -18,66 +17,54 @@ import {
 import { useContactForm } from "../hooks/mutations/useContactForm";
 import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
 import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
-import { useToast } from "../hooks/use-toast";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-type FormData = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.email("Invalid email"),
+  subject: z.string().min(1, "Subject is required"),
+  message: z.string().min(10, "Message is too short"),
+});
+
+type FormData = z.infer<typeof contactSchema>;
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
   const {
     data: developerInfo,
-    loading: devLoading,
-    error: devError,
+    isLoading: devLoading,
+    isError: devError,
   } = useDeveloperInfo();
+  const { submitContact } = useContactForm();
 
-  const {
-    submitContact,
-    submitting,
-    error: submitError,
-    resetForm,
-  } = useContactForm();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    resetForm();
-  }, [resetForm]);
-
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: FormData) => {
     try {
-      await submitContact(formData);
-
-      toast({
-        title: "Message sent successfully!",
+      await submitContact(data);
+      toast.success("Message sent successfully!", {
         description: "Thank you for reaching out. I'll get back to you soon.",
       });
-
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      reset(); // Clears form
     } catch {
-      toast({
-        title: "Failed to send message",
-        description: submitError || "Please try again later.",
-        variant: "destructive",
+      toast.error("Failed to send message", {
+        description: "Please try again later.",
       });
     }
   };
@@ -265,7 +252,7 @@ const Contact: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-gray-300">
@@ -273,14 +260,14 @@ const Contact: React.FC = () => {
                       </Label>
                       <Input
                         id="name"
-                        name="name"
-                        type="text"
-                        placeholder="Your name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
+                        {...register("name")}
                         className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-blue-400"
                       />
+                      {errors.name && (
+                        <p className="text-red-400 text-sm">
+                          {errors.name.message}
+                        </p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-gray-300">
@@ -288,14 +275,15 @@ const Contact: React.FC = () => {
                       </Label>
                       <Input
                         id="email"
-                        name="email"
                         type="email"
-                        placeholder="your.email@example.com"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
+                        {...register("email")}
                         className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-blue-400"
                       />
+                      {errors.email && (
+                        <p className="text-red-400 text-sm">
+                          {errors.email.message}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -305,14 +293,14 @@ const Contact: React.FC = () => {
                     </Label>
                     <Input
                       id="subject"
-                      name="subject"
-                      type="text"
-                      placeholder="What's this about?"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      required
+                      {...register("subject")}
                       className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-blue-400"
                     />
+                    {errors.subject && (
+                      <p className="text-red-400 text-sm">
+                        {errors.subject.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -321,22 +309,23 @@ const Contact: React.FC = () => {
                     </Label>
                     <Textarea
                       id="message"
-                      name="message"
-                      placeholder="Tell me about your project, timeline, and any specific requirements..."
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      required
                       rows={6}
+                      {...register("message")}
                       className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-blue-400 resize-none"
                     />
+                    {errors.message && (
+                      <p className="text-red-400 text-sm">
+                        {errors.message.message}
+                      </p>
+                    )}
                   </div>
 
                   <Button
                     type="submit"
-                    disabled={submitting}
+                    disabled={isSubmitting}
                     className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-3"
                   >
-                    {submitting ? (
+                    {isSubmitting ? (
                       <div className="flex items-center justify-center space-x-2">
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         <span>Sending...</span>

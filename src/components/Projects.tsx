@@ -32,7 +32,11 @@ const Projects: React.FC = () => {
   const [filter, setFilter] = useState<string>("All");
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const { data: allProjects, loading, error } = useProjects();
+  const {
+    data: allProjects,
+    isLoading: loading,
+    isError: error,
+  } = useProjects();
 
   const allCategories = useMemo(() => {
     if (!allProjects) return ["All"];
@@ -154,7 +158,11 @@ const Projects: React.FC = () => {
                     {project.tech_stack
                       .slice(0, 3)
                       .map((tech: string, index: number) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {tech}
                         </Badge>
                       ))}
@@ -170,7 +178,11 @@ const Projects: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       {project.rating != null && project.rating > 0 && (
                         <div className="flex items-center space-x-1">
-                          <Star size={14} fill="currentColor" className="text-yellow-500" />
+                          <Star
+                            size={14}
+                            fill="currentColor"
+                            className="text-yellow-500"
+                          />
                           <span>{project.rating.toFixed(1)}</span>
                         </div>
                       )}
@@ -284,7 +296,10 @@ const Projects: React.FC = () => {
                       <ul className="space-y-1 text-sm text-gray-600">
                         {selectedProject.features.map(
                           (feature: string, index: number) => (
-                            <li key={index} className="flex items-start space-x-2">
+                            <li
+                              key={index}
+                              className="flex items-start space-x-2"
+                            >
                               <span className="text-blue-600 mt-1">•</span>
                               <span>{feature}</span>
                             </li>
@@ -307,25 +322,36 @@ const Projects: React.FC = () => {
                     </div>
 
                     {/* Conditional Stats in Modal */}
-                    {(selectedProject.rating != null && selectedProject.rating > 0) ||
-                      (selectedProject.downloads != null && selectedProject.downloads > 0) ? (
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 pt-2">
-                          {selectedProject.rating != null && selectedProject.rating > 0 && (
+                    {(selectedProject.rating != null &&
+                      selectedProject.rating > 0) ||
+                    (selectedProject.downloads != null &&
+                      selectedProject.downloads > 0) ? (
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 pt-2">
+                        {selectedProject.rating != null &&
+                          selectedProject.rating > 0 && (
                             <div className="flex items-center space-x-1">
-                              <Star size={16} fill="currentColor" className="text-yellow-500" />
-                              <span className="font-medium">{selectedProject.rating.toFixed(1)} / 5</span>
-                            </div>
-                          )}
-                          {selectedProject.downloads != null && selectedProject.downloads > 0 && (
-                            <div className="flex items-center space-x-1">
-                              <Download size={16} />
+                              <Star
+                                size={16}
+                                fill="currentColor"
+                                className="text-yellow-500"
+                              />
                               <span className="font-medium">
-                                {formatDownloads(selectedProject.downloads)} downloads
+                                {selectedProject.rating.toFixed(1)} / 5
                               </span>
                             </div>
                           )}
-                        </div>
-                      ) : null}
+                        {selectedProject.downloads != null &&
+                          selectedProject.downloads > 0 && (
+                            <div className="flex items-center space-x-1">
+                              <Download size={16} />
+                              <span className="font-medium">
+                                {formatDownloads(selectedProject.downloads)}{" "}
+                                downloads
+                              </span>
+                            </div>
+                          )}
+                      </div>
+                    ) : null}
 
                     {/* Show all GitHub repos in modal */}
                     {selectedProject.github_repos.length > 0 && (
@@ -355,7 +381,8 @@ const Projects: React.FC = () => {
               </div>
 
               {/* Fixed Action Buttons at Bottom */}
-              {(selectedProject.demo_url || selectedProject.github_repos.length > 0) && (
+              {(selectedProject.demo_url ||
+                selectedProject.github_repos.length > 0) && (
                 <div className="p-6 border-t flex gap-4">
                   {selectedProject.demo_url && (
                     <Button
@@ -373,7 +400,10 @@ const Projects: React.FC = () => {
                       variant="outline"
                       className="flex-1"
                       onClick={() =>
-                        window.open(selectedProject.github_repos[0].url, "_blank")
+                        window.open(
+                          selectedProject.github_repos[0].url,
+                          "_blank"
+                        )
                       }
                     >
                       <img

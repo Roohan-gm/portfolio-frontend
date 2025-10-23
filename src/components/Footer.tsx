@@ -10,8 +10,8 @@ const Footer = () => {
 
   const {
     data: developerInfo,
-    loading: devLoading,
-    error: devError,
+    isLoading: devLoading,
+    isError: devError,
   } = useDeveloperInfo();
 
   const currentYear = new Date().getFullYear();

@@ -9,10 +9,11 @@ export interface ContactFormFields {
   message: string;
 }
 
-export interface ContactResponse {
+export type ContactResponse = {
   success: boolean;
+  message: string;
   id?: string;
-}
+};
 
 export interface SocialLink {
   name: string;

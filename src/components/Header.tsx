@@ -11,8 +11,9 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ activeSection, onSectionChange }) => {
+  const { data: developer, isLoading: loading } = useDeveloperInfo();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: developer, loading } = useDeveloperInfo(); // Fetch data
+  // Fetch data
 
   const navItems = [
     { id: "hero", label: "Home" },
