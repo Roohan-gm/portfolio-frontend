@@ -69,10 +69,11 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen bg-slate-900 flex items-center justify-center"
+      className="relative w-full bg-slate-900 flex items-center justify-center px-4 sm:px-6"
     >
+      {/* Remove min-h-screen; use dynamic height */}
       {loading && (
-        <div className="space-y-4 animate-pulse">
+        <div className="w-full max-w-4xl py-16 space-y-4 animate-pulse">
           <div className="h-8 bg-slate-800 rounded w-3/4"></div>
           <div className="h-4 bg-slate-800 rounded w-full"></div>
           <div className="h-4 bg-slate-800 rounded w-5/6"></div>
@@ -82,20 +83,21 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
       {error && <ErrorMessage message="Failed to load developer information" />}
 
       {!loading && !error && (
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative w-full max-w-7xl py-16 md:py-24">
+          {/* Use flex-col on mobile, grid on lg */}
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
             {/* Left Column - Content */}
-            <div className="space-y-8">
+            <div className="w-full lg:w-1/2 space-y-6 lg:space-y-8">
               <div className="space-y-4">
                 <Badge
                   variant="secondary"
-                  className="bg-slate-800 text-blue-400 border-blue-500/20"
+                  className="bg-slate-800 text-blue-400 border-blue-500/20 text-sm"
                 >
-                  <Zap size={14} className="mr-2" />
+                  <Zap size={14} className="mr-1.5" />
                   Available for hire
                 </Badge>
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight">
                   <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
                     Full-Stack
                   </span>
@@ -103,19 +105,19 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                   <span className="text-gray-100">Developer</span>
                 </h1>
 
-                <p className="text-xl text-gray-300 leading-relaxed max-w-2xl">
+                <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
                   {developerInfo?.bio ||
                     "Passionate React Native developer creating amazing mobile experiences."}
                 </p>
 
-                <div className="flex items-center space-x-4 text-gray-400">
-                  <div className="flex items-center space-x-2">
+                <div className="flex flex-wrap items-center gap-3 text-gray-400 text-sm sm:text-base">
+                  <div className="flex items-center gap-1.5">
                     <MapPin size={16} />
                     <span>
                       {developerInfo?.location || "San Francisco, CA"}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-1.5">
                     <Smartphone size={16} />
                     <span>
                       {developerInfo?.stats.yearsExperience || 1}+ Years
@@ -126,7 +128,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button
                   onClick={scrollToProjects}
                   size="lg"
@@ -163,56 +165,61 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                 )}
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800">
+              {/* Quick Stats – stack on mobile */}
+              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-xl font-bold text-white">
                     {developerInfo?.stats?.productsShipped ?? 0}
                   </div>
-                  <div className="text-sm text-gray-400">Products Shipped</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Products Shipped
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-xl font-bold text-white">
                     {formatMetric(developerInfo?.stats?.activeUsers ?? 0)}+
                   </div>
-                  <div className="text-sm text-gray-400">Active Users</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Active Users
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-xl font-bold text-white">
                     {developerInfo?.stats?.averageRating ?? 0}★
                   </div>
-                  <div className="text-sm text-gray-400">Avg Rating</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Avg Rating
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Code Preview */}
-            <div className="relative">
-              <div className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden shadow-2xl">
-                {/* Terminal Header */}
-                <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-700">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            {/* Right Column – Code Preview */}
+            <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+              <div className="relative max-w-lg w-full">
+                <div className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden shadow-2xl">
+                  <div className="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3 bg-slate-900 border-b border-slate-700">
+                    <div className="flex items-center space-x-1.5">
+                      <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+                      <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
+                      <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-gray-400 text-xs sm:text-sm">
+                      <Code size={14} />
+                      <span>OptimizedList.js</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                    <Code size={16} />
-                    <span>OptimizedList.js</span>
+                  <div className="p-3 sm:p-4 text-xs sm:text-sm font-mono overflow-x-auto">
+                    <pre className="text-gray-300 whitespace-pre">
+                      <code>{codeSnippet}</code>
+                    </pre>
                   </div>
                 </div>
 
-                {/* Code Content */}
-                <div className="p-4 text-sm font-mono">
-                  <pre className="text-gray-300 leading-relaxed">
-                    <code>{codeSnippet}</code>
-                  </pre>
+                {/* Floating icon – hide on small screens or reposition */}
+                <div className="hidden sm:flex absolute -top-3 -right-3 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg items-center justify-center shadow-lg animate-pulse">
+                  <Smartphone className="text-white" size={20} />
                 </div>
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center shadow-lg animate-pulse">
-                <Smartphone className="text-white" size={24} />
               </div>
             </div>
           </div>
