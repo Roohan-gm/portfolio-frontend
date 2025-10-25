@@ -73,7 +73,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
     >
       {/* Remove min-h-screen; use dynamic height */}
       {loading && (
-        <div className="w-full max-w-4xl py-36 space-y-4 animate-pulse md:py-24">
+        <div className="mx-auto max-w-7xl py-36 space-y-4 animate-pulse md:py-24">
           <div className="h-8 bg-slate-800 rounded w-3/4"></div>
           <div className="h-4 bg-slate-800 rounded w-full"></div>
           <div className="h-4 bg-slate-800 rounded w-5/6"></div>
@@ -83,9 +83,9 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
       {error && <ErrorMessage message="Failed to load developer information" />}
 
       {!loading && !error && (
-        <div className="relative w-full max-w-7xl py-16 md:py-24">
+        <div className="relative mx-auto max-w-7xl py-16 md:py-24">
           {/* Use flex-col on mobile, grid on lg */}
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
+          <div className="max-w-7xl flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
             {/* Left Column - Content */}
             <div className="w-full lg:w-1/2 space-y-6 lg:space-y-8">
               <div className="space-y-4">
