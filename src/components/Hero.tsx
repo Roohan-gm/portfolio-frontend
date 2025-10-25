@@ -73,7 +73,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
     >
       {/* Remove min-h-screen; use dynamic height */}
       {loading && (
-        <div className="relative w-full max-w-7xl py-16 md:pb-24 md:pt-34 space-y-6 animate-pulse">
+        <div className="w-full max-w-4xl py-16 space-y-4 animate-pulse">
           <div className="h-8 bg-slate-800 rounded w-3/4"></div>
           <div className="h-4 bg-slate-800 rounded w-full"></div>
           <div className="h-4 bg-slate-800 rounded w-5/6"></div>
@@ -83,7 +83,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
       {error && <ErrorMessage message="Failed to load developer information" />}
 
       {!loading && !error && (
-        <div className="relative w-full max-w-7xl py-16 md:pb-24 md:pt-34">
+        <div className="relative w-full max-w-7xl py-16 md:py-24">
           {/* Use flex-col on mobile, grid on lg */}
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
             {/* Left Column - Content */}
@@ -91,7 +91,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
               <div className="space-y-4">
                 <Badge
                   variant="secondary"
-                  className="bg-slate-800 text-blue-400 border-blue-500/20 text-sm"
+                  className="bg-slate-800 text-blue-400 border-blue-500/20 text-sm mt-6 sm:mt-0"
                 >
                   <Zap size={14} className="mr-1.5" />
                   Available for hire
