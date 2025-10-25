@@ -73,7 +73,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
     >
       {/* Remove min-h-screen; use dynamic height */}
       {loading && (
-        <div className="w-full max-w-4xl py-16 space-y-4 animate-pulse">
+        <div className="relative w-full max-w-7xl pt-10 pb-16 md:pt-16 md:pb-24">
           <div className="h-8 bg-slate-800 rounded w-3/4"></div>
           <div className="h-4 bg-slate-800 rounded w-full"></div>
           <div className="h-4 bg-slate-800 rounded w-5/6"></div>
