@@ -50,7 +50,7 @@ const Portfolio = () => {
         <Contact />
       </main>
       <Footer />
-      <Toaster />
+      <Toaster richColors position="top-right"/>
     </div>
   );
 };
@@ -63,7 +63,6 @@ function App() {
           <Route path="/" element={<Portfolio />} />
         </Routes>
       </BrowserRouter>
-      <Toaster richColors position="top-right" />
     </div>
   );
 }
