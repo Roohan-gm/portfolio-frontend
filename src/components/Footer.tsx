@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { Mail, Heart, Code, Coffee, ArrowUp, MapPin } from "lucide-react";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import { useDeveloperInfo } from "@/hooks/useDeveloperInfo";
+import { LoadingFooter } from "./loader/footer.loader";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -90,7 +91,7 @@ const Footer = () => {
     return (
       <footer className="bg-slate-900 text-white border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-          Loading footer...
+          <LoadingFooter />;
         </div>
       </footer>
     );
@@ -117,9 +118,10 @@ const Footer = () => {
               <div className="w-12 h-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">
                   {developerInfo?.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("") || "AM"}
+                    .split(/[\s.]+/) // split on space OR dot
+                    .map((n) => n[0]) // first char of each chunk
+                    .join("")
+                    .toUpperCase() || "RGM"}
                 </span>
               </div>
               <h3 className="text-xl font-bold">{developerInfo?.name}</h3>

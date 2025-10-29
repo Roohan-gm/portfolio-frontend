@@ -14,14 +14,11 @@ import {
 import { useExperiences } from "../hooks/useExperiences";
 import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
 import { useTestimonials } from "../hooks/useTestimonials";
-import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
+import { ErrorMessage } from "../components/ui/custom";
 import type { Testimonial } from "@/types";
+import { AboutSkeleton } from "./loader/about.loader";
 const About = () => {
-  const {
-    data: developer,
-    isLoading,
-    isError
-  } = useDeveloperInfo();
+  const { data: developer, isLoading, isError } = useDeveloperInfo();
   const {
     data: experience,
     isLoading: expLoading,
@@ -34,9 +31,7 @@ const About = () => {
   } = useTestimonials();
 
   const getSocialUrl = (platform: string) => {
-    return (
-      developer?.social.find((link) => link.name === platform)?.url || ""
-    );
+    return developer?.social.find((link) => link.name === platform)?.url || "";
   };
 
   if (isLoading || expLoading || testLoading) {
@@ -49,7 +44,7 @@ const About = () => {
             </h2>
           </div>
           <div className="flex justify-center">
-            <LoadingSpinner size="lg" />
+            <AboutSkeleton />
           </div>
         </div>
       </section>

@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 import { useContactForm } from "../hooks/mutations/useContactForm";
 import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
-import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
+import { ErrorMessage } from "../components/ui/custom";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { ContactSkeleton } from "./loader/contact.loader";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -79,7 +80,7 @@ const Contact: React.FC = () => {
             </h2>
           </div>
           <div className="flex justify-center">
-            <LoadingSpinner size="lg" />
+            <ContactSkeleton />
           </div>
         </div>
       </section>

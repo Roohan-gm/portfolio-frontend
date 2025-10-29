@@ -12,9 +12,10 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { ExternalLink, Star, Download } from "lucide-react";
 import { useProjects } from "../hooks/useProjects";
-import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
+import { ErrorMessage } from "../components/ui/custom";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import type { Project } from "@/types";
+import { ProjectsSkeleton } from "./loader/project.loader";
 
 // Helper to format download count (e.g., 1500 → "1.5K", 2500000 → "2.5M")
 const formatDownloads = (num: number): string => {
@@ -66,7 +67,7 @@ const Projects: React.FC = () => {
             </h2>
           </div>
           <div className="flex justify-center">
-            <LoadingSpinner size="lg" />
+            <ProjectsSkeleton />
           </div>
         </div>
       </section>
@@ -198,7 +199,7 @@ const Projects: React.FC = () => {
                           <span></span>
                         )}
                     </div>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="default" className="text-xs bg-blue-600 text-white">
                       {project.category}
                     </Badge>
                   </div>

@@ -13,9 +13,10 @@ import {
   Hammer,
 } from "lucide-react";
 import { useSkills } from "../hooks/useSkills";
-import { LoadingSpinner, ErrorMessage } from "../components/ui/custom";
+import { ErrorMessage } from "../components/ui/custom";
 import { useDeveloperInfo } from "@/hooks/useDeveloperInfo";
 import { formatMetric } from "@/utils/formatMetric";
+import { SkillsSkeleton } from "./loader/skill.loader";
 
 const Skills = () => {
   const {
@@ -36,7 +37,7 @@ const Skills = () => {
             </h2>
           </div>
           <div className="flex justify-center">
-            <LoadingSpinner size="lg" />
+            <SkillsSkeleton />;
           </div>
         </div>
       </section>

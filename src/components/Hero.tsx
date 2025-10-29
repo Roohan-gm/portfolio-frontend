@@ -12,6 +12,7 @@ import {
 import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
 import { ErrorMessage } from "../components/ui/custom";
 import { formatMetric } from "@/utils/formatMetric";
+import { HeroSkeleton } from "./loader/hero.loader";
 
 const codeSnippet = `// React Native Performance Optimization
 import React, { useMemo, useCallback } from 'react';
@@ -74,9 +75,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
       {loading && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-full py-16 space-y-4 animate-pulse">
-            <div className="h-8 bg-slate-800 rounded w-3/4"></div>
-            <div className="h-4 bg-slate-800 rounded w-full"></div>
-            <div className="h-4 bg-slate-800 rounded w-5/6"></div>
+            <HeroSkeleton />
           </div>
         </div>
       )}
@@ -93,7 +92,7 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
             {/* Left Column - Content */}
             <div className="w-full lg:w-1/2 space-y-6 lg:space-y-8">
               <div className="space-y-4">
-                {/* ✅ Consistent top margin on all screens */}
+                {/* Consistent top margin on all screens */}
                 <Badge
                   variant="secondary"
                   className="bg-slate-800 text-blue-400 border-blue-500/20 text-sm mt-4"
@@ -118,12 +117,15 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                 <div className="flex flex-wrap items-center gap-3 text-gray-400 text-sm sm:text-base">
                   <div className="flex items-center gap-1.5">
                     <MapPin size={16} />
-                    <span>{developerInfo?.location || "Karachi, Pakistan"}</span>
+                    <span>
+                      {developerInfo?.location || "Karachi, Pakistan"}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Smartphone size={16} />
                     <span>
-                      {developerInfo?.stats.yearsExperience || 1}+ Years Experience
+                      {developerInfo?.stats.yearsExperience || 1}+ Years
+                      Experience
                     </span>
                   </div>
                 </div>
@@ -173,19 +175,25 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                   <div className="text-xl font-bold text-white">
                     {developerInfo?.stats?.productsShipped ?? 0}
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-400">Products Shipped</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Products Shipped
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-xl font-bold text-white">
                     {formatMetric(developerInfo?.stats?.activeUsers ?? 0)}+
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-400">Active Users</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Active Users
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-xl font-bold text-white">
                     {developerInfo?.stats?.averageRating ?? 0}★
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-400">Avg Rating</div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Avg Rating
+                  </div>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Menu, X, Mail } from "lucide-react";
 import { useState } from "react";
 import { useDeveloperInfo } from "@/hooks/useDeveloperInfo";
+import { HeaderSkeleton } from "./loader/header.loader";
 
 type HeaderProps = {
   activeSection: string;
@@ -37,9 +38,11 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onSectionChange }) => {
     return developer?.social.find((link) => link.name === platform)?.url || "";
   };
 
+  if (loading) return <HeaderSkeleton />;
+
   // Updated render function
   const renderSocialLinks = () => {
-    if (loading || !developer) return null;
+    if (!developer) return null;
 
     return (
       <>
@@ -90,9 +93,10 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onSectionChange }) => {
             <div className="w-11 h-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">
                 {developer?.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("") || "RGM"}
+                  .split(/[\s.]+/) // split on space OR dot
+                  .map((n) => n[0]) // first char of each chunk
+                  .join("")
+                  .toUpperCase() || "RGM"}
               </span>
             </div>
             <span className="text-white font-semibold text-lg hidden sm:block">
