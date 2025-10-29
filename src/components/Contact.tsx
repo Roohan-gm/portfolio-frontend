@@ -79,7 +79,7 @@ const Contact: React.FC = () => {
               Let's Work <span className="text-blue-400">Together</span>
             </h2>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center max-w-3xl mx-auto">
             <ContactSkeleton />
           </div>
         </div>
