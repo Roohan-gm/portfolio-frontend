@@ -99,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onSectionChange }) => {
                   .toUpperCase() || "RGM"}
               </span>
             </div>
-            <span className="text-white font-semibold text-lg hidden sm:block">
+            <span className="text-white font-semibold text-lg block">
               {developer?.name || "Roohan G.M"}
             </span>
           </div>
