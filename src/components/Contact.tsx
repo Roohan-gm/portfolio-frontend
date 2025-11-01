@@ -345,7 +345,7 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16 p-8 border border-slate-700 rounded-2xl bg-slate-800/50">
+        <div className="text-center mt-16 p-8 border border-slate-700 rounded-2xl bg-slate-800/50 hover:bg-slate-800 transition-colors hover:shadow-lg hover:scale-[1.02] hover:border-gray-400">
           <h3 className="text-2xl font-bold text-white mb-4">
             Ready to Start Your Project?
           </h3>
@@ -356,7 +356,7 @@ const Contact: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-800"
               onClick={() =>
                 window.open(
                   `mailto:${

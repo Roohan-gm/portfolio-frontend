@@ -1,13 +1,6 @@
 "use client";
 
 import { useMemo, useState, useRef } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { ExternalLink, Star, Download } from "lucide-react";
@@ -16,17 +9,8 @@ import { ErrorMessage } from "../components/ui/custom";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import type { Project } from "@/types";
 import { ProjectsSkeleton } from "./loader/project.loader";
-
-// Helper to format download count (e.g., 1500 → "1.5K", 2500000 → "2.5M")
-const formatDownloads = (num: number): string => {
-  if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-  }
-  if (num >= 1_000) {
-    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
-  }
-  return num.toString();
-};
+import ProjectsGrid from "./ProjectsGrid";
+import { formatMetric } from "@/utils/formatMetric";
 
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -120,136 +104,7 @@ const Projects: React.FC = () => {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {projects.map((project) => (
-            <Card
-              key={project._id}
-              className="group hover:shadow-xl transition-all duration-300 border-gray-200 hover:border-blue-200 cursor-pointer"
-              onClick={() => setSelectedProject(project)}
-            >
-              <CardHeader className="pb-4">
-                <div className="relative">
-                  <img
-                    src={project.images[0]}
-                    alt={project.title}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <Badge
-                    variant="secondary"
-                    className={`absolute top-2 right-2 ${
-                      project.status === "Live"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {project.status}
-                  </Badge>
-                </div>
-                <CardTitle className="text-xl group-hover:text-blue-600 transition-colors line-clamp-1">
-                  {project.title}
-                </CardTitle>
-                <CardDescription className="text-gray-600">
-                  {project.description}
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech_stack
-                      .slice(0, 3)
-                      .map((tech: string, index: number) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-xs"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    {project.tech_stack.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{project.tech_stack.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* Conditional Rating & Downloads */}
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center space-x-4">
-                      {project.rating != null && project.rating > 0 && (
-                        <div className="flex items-center space-x-1">
-                          <Star
-                            size={14}
-                            fill="currentColor"
-                            className="text-yellow-500"
-                          />
-                          <span>{project.rating.toFixed(1)}</span>
-                        </div>
-                      )}
-                      {project.downloads != null && project.downloads > 0 && (
-                        <div className="flex items-center space-x-1">
-                          <Download size={14} />
-                          <span>{formatDownloads(project.downloads)}</span>
-                        </div>
-                      )}
-                      {/* Show placeholder if neither exists */}
-                      {(!project.rating || project.rating <= 0) &&
-                        (!project.downloads || project.downloads <= 0) && (
-                          <span></span>
-                        )}
-                    </div>
-                    <Badge variant="default" className="text-xs bg-blue-600 text-white">
-                      {project.category}
-                    </Badge>
-                  </div>
-
-                  {/* Action Buttons */}
-                  {project.demo_url || project.github_repos.length > 0 ? (
-                    <div className="flex gap-2 pt-2">
-                      {project.demo_url && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.open(project.demo_url, "_blank");
-                          }}
-                        >
-                          <ExternalLink size={14} className="mr-2" />
-                          Demo
-                        </Button>
-                      )}
-                      {project.github_repos.length > 0 && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.open(project.github_repos[0].url, "_blank");
-                          }}
-                        >
-                          <img
-                            src={SOCIAL_LOGOS.GitHub}
-                            alt="GitHub"
-                            className="w-6 h-6 mr-2"
-                          />
-                          {project.github_repos.length === 1 ? "Code" : "Code+"}
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500 italic pt-2">
-                      No demo or source available.
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <ProjectsGrid projects={projects} onSelect={setSelectedProject} />
 
         {/* Project Modal/Detail View */}
         {selectedProject && (
@@ -346,7 +201,7 @@ const Projects: React.FC = () => {
                             <div className="flex items-center space-x-1">
                               <Download size={16} />
                               <span className="font-medium">
-                                {formatDownloads(selectedProject.downloads)}{" "}
+                                {formatMetric(selectedProject.downloads)}{" "}
                                 downloads
                               </span>
                             </div>

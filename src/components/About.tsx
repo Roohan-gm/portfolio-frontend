@@ -84,7 +84,7 @@ const About = () => {
           {/* Personal Info & Story */}
           <div className="lg:col-span-2 space-y-8">
             {/* Bio Card */}
-            <Card className="p-8 hover:shadow-lg transition-shadow">
+            <Card className="p-8 hover:shadow-lg transition-shadow hover:border-gray-300 border-transparent">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="flex-shrink-0 ">
                   <img
