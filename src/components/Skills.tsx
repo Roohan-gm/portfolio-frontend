@@ -6,17 +6,20 @@ import { SkillsSkeleton } from "./loader/skill.loader";
 import { AnimateNumber } from "@/utils/number-animation";
 import MobileSkillsGrid from "@/components/MobileSkillsGrid";
 import AnimatedSkillCategories from "./AnimatedSkillCategories";
+import { useInView } from "@react-spring/web";
 
 const Skills = () => {
+  const [ref, inView] = useInView({ once: true });
+
   const {
     data: skills,
     isLoading: skillsLoading,
     isError: error,
-  } = useSkills();
+  } = useSkills(inView);
   const { data: developer, isLoading: devLoading } = useDeveloperInfo();
 
   // Check both loading states
-  if (skillsLoading || devLoading) {
+  if (skillsLoading || devLoading && inView) {
     return (
       <section id="skills" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +52,7 @@ const Skills = () => {
   }
 
   return (
-    <section id="skills" className="py-20 bg-white">
+    <section ref={ref} id="skills" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">

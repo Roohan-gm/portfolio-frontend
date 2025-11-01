@@ -11,17 +11,19 @@ import type { Project } from "@/types";
 import { ProjectsSkeleton } from "./loader/project.loader";
 import ProjectsGrid from "./ProjectsGrid";
 import { formatMetric } from "@/utils/formatMetric";
+import { useInView } from "@react-spring/web";
 
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [filter, setFilter] = useState<string>("All");
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const [ref, inView] = useInView({ once: true });
   const {
     data: allProjects,
     isLoading: loading,
     isError: error,
-  } = useProjects();
+  } = useProjects(inView);
 
   const allCategories = useMemo(() => {
     if (!allProjects) return ["All"];
@@ -41,7 +43,7 @@ const Projects: React.FC = () => {
     }
   };
 
-  if (loading) {
+  if (loading && inView) {
     return (
       <section id="projects" className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,7 +76,7 @@ const Projects: React.FC = () => {
   }
 
   return (
-    <section id="projects" className="py-20 bg-slate-50">
+    <section ref={ref} id="projects" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">

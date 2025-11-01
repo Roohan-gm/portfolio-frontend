@@ -17,24 +17,27 @@ import { useTestimonials } from "../hooks/useTestimonials";
 import { ErrorMessage } from "../components/ui/custom";
 import type { Testimonial } from "@/types";
 import { AboutSkeleton } from "./loader/about.loader";
+import { useInView } from "@react-spring/web";
+
 const About = () => {
+  const [ref, inView] = useInView({ once: true });
   const { data: developer, isLoading, isError } = useDeveloperInfo();
   const {
     data: experience,
     isLoading: expLoading,
     isError: expError,
-  } = useExperiences();
+  } = useExperiences(inView);
   const {
     data: testimonials,
     isLoading: testLoading,
     isError: testError,
-  } = useTestimonials();
+  } = useTestimonials(inView);
 
   const getSocialUrl = (platform: string) => {
     return developer?.social.find((link) => link.name === platform)?.url || "";
   };
 
-  if (isLoading || expLoading || testLoading) {
+  if (isLoading || expLoading || (testLoading && inView)) {
     return (
       <section id="about" className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,7 +70,7 @@ const About = () => {
   }
 
   return (
-    <section id="about" className="py-20 bg-slate-50">
+    <section ref={ref} id="about" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
