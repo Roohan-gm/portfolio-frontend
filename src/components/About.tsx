@@ -72,7 +72,7 @@ const About = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            About <span className="text-blue-600">Me</span>
+            About <span className="text-blue-600">Developer</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Get to know the developer behind the code - my journey, passion, and
@@ -84,13 +84,13 @@ const About = () => {
           {/* Personal Info & Story */}
           <div className="lg:col-span-2 space-y-8">
             {/* Bio Card */}
-            <Card className="p-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="flex-shrink-0 ">
                   <img
                     src={developer?.avatar}
                     alt={developer?.name}
-                    className="w-32 h-32 rounded-2xl object-cover shadow-lg bg-blue-900/40"
+                    className="w-32 h-32 rounded-2xl object-cover shadow-lg bg-blue-900/40 hover:scale-105 transition-transform"
                   />
                 </div>
                 <div className="flex-1 space-y-4">
@@ -145,7 +145,7 @@ const About = () => {
             </Card>
 
             {/* Experience Timeline */}
-            <Card className="p-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow hover:border-blue-400 border-transparent">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Award className="mr-3 text-blue-600" />
                 Professional Experience
@@ -192,7 +192,7 @@ const About = () => {
             </Card>
 
             {/* Personal Interests */}
-            <Card className="p-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow hover:border-red-400 border-transparent">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Heart className="mr-3 text-red-500" />
                 Beyond Code
@@ -277,7 +277,7 @@ const About = () => {
             ))}
 
             {/* Contact Info Summary */}
-            <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
+            <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200 hover:shadow-lg transition-shadow hover:border-blue-400">
               <h4 className="font-semibold text-gray-900 mb-4">
                 Let's Connect
               </h4>

@@ -13,6 +13,7 @@ import { useDeveloperInfo } from "../hooks/useDeveloperInfo";
 import { ErrorMessage } from "../components/ui/custom";
 import { formatMetric } from "@/utils/formatMetric";
 import { HeroSkeleton } from "./loader/hero.loader";
+import { AnimateNumber } from "@/utils/number-animation";
 
 const codeSnippet = `// React Native Performance Optimization
 import React, { useMemo, useCallback } from 'react';
@@ -173,23 +174,34 @@ const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
               <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800">
                 <div className="text-center">
                   <div className="text-xl font-bold text-white">
-                    {developerInfo?.stats?.productsShipped ?? 0}
+                    <AnimateNumber
+                      n={developerInfo?.stats?.productsShipped ?? 0}
+                      format={(val) => val.toFixed(0)}
+                    />
                   </div>
                   <div className="text-xs sm:text-sm text-gray-400">
                     Products Shipped
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold text-white">
-                    {formatMetric(developerInfo?.stats?.activeUsers ?? 0)}+
+                  <div className="text-xl font-bold text-white flex items-center justify-center">
+                    <AnimateNumber
+                      n={developerInfo?.stats?.activeUsers ?? 0}
+                      format={formatMetric}
+                    />
+                    +
                   </div>
                   <div className="text-xs sm:text-sm text-gray-400">
                     Active Users
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold text-white">
-                    {developerInfo?.stats?.averageRating ?? 0}★
+                  <div className="text-xl font-bold text-white flex items-center justify-center">
+                    <AnimateNumber
+                      n={developerInfo?.stats?.averageRating ?? 0}
+                      format={(val) => val.toFixed(1)}
+                    />
+                    ★
                   </div>
                   <div className="text-xs sm:text-sm text-gray-400">
                     Avg Rating

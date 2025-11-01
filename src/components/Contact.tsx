@@ -79,7 +79,7 @@ const Contact: React.FC = () => {
               Let's Work <span className="text-blue-400">Together</span>
             </h2>
           </div>
-          <div >
+          <div>
             <ContactSkeleton />
           </div>
         </div>
@@ -167,7 +167,7 @@ const Contact: React.FC = () => {
           {/* Contact Information */}
           <div className="space-y-8">
             {/* Contact Methods */}
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-slate-800 border-slate-700 hover:shadow-lg transition-shadow hover:scale-[1.02] hover:bg-slate-700/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <MessageSquare className="mr-3 text-blue-400" />
@@ -201,7 +201,7 @@ const Contact: React.FC = () => {
             </Card>
 
             {/* Social Links */}
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-slate-800 border-slate-700 hover:shadow-lg transition-shadow hover:scale-[1.02] hover:bg-slate-700/50">
               <CardHeader>
                 <CardTitle className="text-white">Follow Me</CardTitle>
               </CardHeader>
@@ -224,7 +224,7 @@ const Contact: React.FC = () => {
             </Card>
 
             {/* Availability */}
-            <Card className="bg-gradient-to-br from-blue-600 to-cyan-600 border-0">
+            <Card className="bg-gradient-to-br from-blue-600 to-cyan-600 border-0 hover:shadow-lg transition-shadow hover:scale-[1.02] hover:from-blue-700 hover:to-cyan-700">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3 mb-4">
                   <Coffee className="w-6 h-6 text-white" />
@@ -246,7 +246,7 @@ const Contact: React.FC = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-slate-800 border-slate-700 hover:shadow-lg transition-shadow hover:scale-[1.02] hover:bg-slate-700/50">
               <CardHeader>
                 <CardTitle className="text-white text-2xl">
                   Send a Message
