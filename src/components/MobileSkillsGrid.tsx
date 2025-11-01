@@ -36,48 +36,46 @@ const expertiseAreas: Expertise[] = [
   },
 ];
 
-/* ---------- progress bar ---------- */
+/* ---------- progress bar (only this animates) ---------- */
 interface ProgressProps {
   value: number;
 }
 
-const Progress = ({ value }: ProgressProps) => (
-  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-    <animated.div
-      className="h-full bg-blue-950"
-      style={{ width: `${value}%` }}
-    />
-  </div>
-);
-
-/* ---------- animated expertise item ---------- */
-interface AnimatedExpertiseProps {
-  expertise: Expertise;
-  index: number;
-}
-
-const AnimatedExpertise = ({ expertise, index }: AnimatedExpertiseProps) => {
+const Progress = ({ value }: ProgressProps) => {
   const [ref, springs] = useInView(
     () => ({
-      from:  { opacity: 0, x: index % 2 ? 50 : -50 },
-      to:    { opacity: 1, x: 0 },
-      delay: index * 120,
-      config: { tension: 220, friction: 30 },
+      from: { width: '0%' },
+      to: { width: `${value}%` },
+      config: { tension: 200, friction: 30 },
     }),
-    { rootMargin: '-20% 0%' }
+    { rootMargin: '-20% 0%', once: true }
   );
 
   return (
-    <animated.div ref={ref} style={springs} className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-gray-900">{expertise.name}</h4>
-        <span className="text-sm font-medium text-gray-600">{expertise.level}%</span>
-      </div>
-      <Progress value={expertise.level} />
-      <p className="text-sm text-gray-600">{expertise.description}</p>
-    </animated.div>
+    <div ref={ref} className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+      <animated.div
+        className="h-full bg-blue-950"
+        style={springs}
+      />
+    </div>
   );
 };
+
+/* ---------- static expertise item ---------- */
+interface AnimatedExpertiseProps {
+  expertise: Expertise;
+}
+
+const AnimatedExpertise = ({ expertise }: AnimatedExpertiseProps) => (
+  <div className="space-y-3">
+    <div className="flex items-center justify-between">
+      <h4 className="font-semibold text-gray-900">{expertise.name}</h4>
+      <span className="text-sm font-medium text-gray-600">{expertise.level}%</span>
+    </div>
+    <Progress value={expertise.level} />
+    <p className="text-sm text-gray-600">{expertise.description}</p>
+  </div>
+);
 
 /* ---------- reusable animated card ---------- */
 interface AnimatedCardProps {
@@ -106,12 +104,12 @@ const AnimatedCard = ({ children, delay = 0, ...props }: AnimatedCardProps) => {
 /* ---------- main component ---------- */
 export default function MobileSkillsGrid() {
   return (
-    <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto p-6">
+    <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto p-6">
       {/* LEFT – expertise */}
       <div className="space-y-6">
         <h3 className="text-2xl font-bold text-gray-900 mb-6">Core Expertise</h3>
-        {expertiseAreas.map((exp, i) => (
-          <AnimatedExpertise key={exp.name} expertise={exp} index={i} />
+        {expertiseAreas.map((exp) => (
+          <AnimatedExpertise key={exp.name} expertise={exp} />
         ))}
       </div>
 
