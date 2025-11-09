@@ -29,7 +29,7 @@ const Skills = () => {
             </h2>
           </div>
           <div className="flex justify-center">
-            <SkillsSkeleton />;
+            <SkillsSkeleton />
           </div>
         </div>
       </section>
@@ -65,7 +65,7 @@ const Skills = () => {
           </p>
         </div>
         {/* Skill Categories */}
-        <AnimatedSkillCategories skills={skills!} />;{/* Expertise Levels */}
+        <AnimatedSkillCategories skills={skills!} />{/* Expertise Levels */}
         <MobileSkillsGrid />
         {/* Certification/Stats */}
         {developer?.stats && (

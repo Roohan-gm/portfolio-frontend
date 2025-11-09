@@ -68,7 +68,7 @@ export default function ProjectsGrid({ projects, onSelect }: Props) {
                   <img
                     src={p.images[0]}
                     alt={p.title}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
+                    className="w-full h-48 object-contain rounded-lg mb-4"
                   />
                   <Badge
                     variant="secondary"

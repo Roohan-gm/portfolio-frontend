@@ -3,6 +3,7 @@ import { Mail, Heart, Code, Coffee, ArrowUp, MapPin } from "lucide-react";
 import { SOCIAL_LOGOS } from "@/constants/socialLogos";
 import { useDeveloperInfo } from "@/hooks/useDeveloperInfo";
 import { LoadingFooter } from "./loader/footer.loader";
+import { Status, StatusIndicator } from "./ui/shadcn-io/status";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -167,20 +168,30 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-4">Connect</h4>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-3">{renderSocialLinks()}</div>
-              <div className="text-gray-300 text-sm flex gap-2 items-center">
+              <div className="flex gap-1 items-center">
                 {developerInfo?.availability ? (
                   <>
-                    <span className="text-green-400 font-black text-2xl leading-none">
-                      •
-                    </span>
-                    <p>Available for freelance projects</p>
+                    <Status
+                      status="online"
+                      className="bg-transparent overflow-visible"
+                    >
+                      <StatusIndicator />
+                    </Status>
+                    <p className="text-gray-300 text-sm">
+                      Available for freelance projects
+                    </p>
                   </>
                 ) : (
                   <>
-                    <span className="text-red-500 font-black text-2xl leading-none">
-                      •
-                    </span>
-                    <p>Not available for new projects</p>
+                    <Status
+                      status="offline"
+                      className="bg-transparent overflow-visible"
+                    >
+                      <StatusIndicator />
+                    </Status>
+                    <p className="text-gray-300 text-sm">
+                      Not available for new projects
+                    </p>
                   </>
                 )}
               </div>

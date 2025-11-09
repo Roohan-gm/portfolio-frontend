@@ -15,7 +15,7 @@ import { formatMetric } from "@/utils/formatMetric";
 import { HeroSkeleton } from "./loader/hero.loader";
 import { AnimateNumber } from "@/utils/number-animation";
 
-const codeSnippet = `// React Native Performance Optimization
+const codeSnippet = `React Native Performance Optimization
 import React, { useMemo, useCallback } from 'react';
 import { FlatList, View, Text } from 'react-native';
 
